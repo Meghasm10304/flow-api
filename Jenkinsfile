@@ -6,24 +6,28 @@ pipeline {
     }
 
     stages {
+
         stage('Setup Environment') {
             steps {
                 sh '''
                     apt-get update
-                    apt-get install -y git python3 python3-pip
+                    apt-get install -y git python3 python3-pip python3-venv
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-                sh 'pip install -r requirements.txt'
+                sh '''
+                    python3 -m venv venv
+                    ./venv/bin/pip install -r requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest tests/ -v'
+                sh './venv/bin/pytest tests/ -v'
             }
         }
 
@@ -52,6 +56,7 @@ pipeline {
         success {
             echo 'Pipeline succeeded — API deployed and healthy.'
         }
+
         failure {
             echo 'Pipeline failed — check logs above.'
         }

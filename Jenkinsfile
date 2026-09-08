@@ -27,7 +27,10 @@ pipeline {
 
         stage('Run Tests') {
             steps {
-                sh './venv/bin/pytest tests/ -v'
+                sh '''
+                    export PYTHONPATH=$WORKSPACE
+                    ./venv/bin/pytest tests/ -v
+                '''
             }
         }
 
@@ -39,15 +42,20 @@ pipeline {
 
         stage('Deploy Locally') {
             steps {
-                sh 'docker stop flow-api || true'
-                sh 'docker rm flow-api || true'
-                sh 'docker run -d -p 5000:5000 --name flow-api flow-api:${BUILD_NUMBER}'
+                sh '''
+                    docker stop flow-api || true
+                    docker rm flow-api || true
+                    docker run -d -p 5000:5000 --name flow-api flow-api:${BUILD_NUMBER}
+                '''
             }
         }
 
         stage('Health Check') {
             steps {
-                sh 'sleep 3 && curl -f http://localhost:5000/health'
+                sh '''
+                    sleep 3
+                    curl -f http://localhost:5000/health
+                '''
             }
         }
     }

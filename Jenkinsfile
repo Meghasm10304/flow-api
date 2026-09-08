@@ -1,10 +1,5 @@
 pipeline {
-    agent {
-        docker { 
-            image 'python:3.12-slim'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
-    }
+    agent any
 
     environment {
         APP_VERSION = "${env.BUILD_NUMBER}"
@@ -17,8 +12,10 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Install Python & Dependencies') {
             steps {
+                // Install Python and pip if not present
+                sh 'apt-get update && apt-get install -y python3 python3-pip'
                 sh 'pip install -r requirements.txt'
             }
         }
@@ -31,6 +28,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                // Build using the host Docker socket
                 sh 'docker build -t flow-api:${BUILD_NUMBER} .'
             }
         }

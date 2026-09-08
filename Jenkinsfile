@@ -8,17 +8,10 @@ pipeline {
     stages {
         stage('Setup Environment') {
             steps {
-                // Install Git and Python
                 sh '''
                     apt-get update
                     apt-get install -y git python3 python3-pip
                 '''
-            }
-        }
-
-        stage('Checkout') {
-            steps {
-                checkout scm
             }
         }
 
@@ -56,7 +49,11 @@ pipeline {
     }
 
     post {
-        success { echo 'Pipeline succeeded — API deployed and healthy.' }
-        failure { echo 'Pipeline failed — check logs above.' }
+        success {
+            echo 'Pipeline succeeded — API deployed and healthy.'
+        }
+        failure {
+            echo 'Pipeline failed — check logs above.'
+        }
     }
 }

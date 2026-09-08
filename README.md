@@ -1,27 +1,29 @@
+# Flow-API
 
 **Automated Python API Deployment Pipeline**
 
 A lightweight Flask API demonstrating a complete CI/CD workflow using Git, Jenkins, and Docker. The focus is not on the application logic, but on the **automation infrastructure** surrounding it.
 
+> **Status:** ✅ Tested locally. API verified via Python and Docker.
+
 ## 🚀 Quick Start
 
-\`\`\`bash
+```bash
 # Run locally
 pip install -r requirements.txt
 python -m app.main
 
 # Run with Docker
 docker build -t flow-api .
-docker run -p 5000:5000 flow-api
+docker run -d -p 5000:5000 flow-api
 
 # View live documentation
-curl http://localhost:5000/about
-\`\`\`
+http://localhost:5000/about
+```
 
 ## 🏗️ Architecture
-![Architecture](docs/architecture.png)
 
-Developer → Git → Jenkins (CI) → Docker Build → Deploy → Health Check
+![Architecture](docs/architecture.png)
 
 | Component | Tool | Purpose |
 |-----------|------|---------|
@@ -31,6 +33,14 @@ Developer → Git → Jenkins (CI) → Docker Build → Deploy → Health Check
 | Containerization | Docker | Consistent runtime environment |
 | Testing | pytest | Validate API before building |
 | Documentation | /about endpoint | Live in-app documentation |
+
+## 🧪 Testing
+
+```bash
+python -m pytest tests/ -v
+```
+
+3 tests pass: index, health, version endpoints.
 
 ## 🧠 Engineering Decisions
 
@@ -58,14 +68,14 @@ Developer → Git → Jenkins (CI) → Docker Build → Deploy → Health Check
 ### Issue 3: Docker image tag collisions
 - **Symptom:** Old container not replaced, stale version running
 - **Cause:** Same tag used across builds
-- **Fix:** Used \${BUILD_NUMBER} as unique image tag
+- **Fix:** Used ${BUILD_NUMBER} as unique image tag
 
 ## 📚 Documentation
 
 Visit the live documentation endpoint:
-\`\`\`
+```
 GET /about
-\`\`\`
+```
 
 ## 📄 License
 

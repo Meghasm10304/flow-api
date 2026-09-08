@@ -6,16 +6,24 @@ pipeline {
     }
 
     stages {
+        stage('Setup Environment') {
+            steps {
+                // Install Git and Python
+                sh '''
+                    apt-get update
+                    apt-get install -y git python3 python3-pip
+                '''
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
             }
         }
 
-        stage('Install Python & Dependencies') {
+        stage('Install Dependencies') {
             steps {
-                // Install Python and pip if not present
-                sh 'apt-get update && apt-get install -y python3 python3-pip'
                 sh 'pip install -r requirements.txt'
             }
         }
@@ -28,7 +36,6 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                // Build using the host Docker socket
                 sh 'docker build -t flow-api:${BUILD_NUMBER} .'
             }
         }

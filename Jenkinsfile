@@ -11,7 +11,7 @@ pipeline {
             steps {
                 sh '''
                     apt-get update
-                    apt-get install -y git python3 python3-pip python3-venv
+                    apt-get install -y git python3 python3-pip python3-venv docker.io curl
                 '''
             }
         }

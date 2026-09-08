@@ -19,6 +19,7 @@ curl http://localhost:5000/about
 \`\`\`
 
 ## 🏗️ Architecture
+![Architecture](docs/architecture.png)
 
 Developer → Git → Jenkins (CI) → Docker Build → Deploy → Health Check
 
